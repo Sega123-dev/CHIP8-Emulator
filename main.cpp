@@ -31,6 +31,19 @@ class Chip8
         for (int i = 0; i < 16; i++)
             stack[i] = 0;
         sp = 0;
+
+        // Function logs
+
+        std::cout << "RAM log: 0KB loaded";
+        for (int i = 0; i < 0xF + 1; i++)
+            std::cout << "Register V" << i + 1 << V[i] << '\n';
+        std::cout << "Delay timer: " << delay_timer << "Hz" << '\n';
+        std::cout << "Sound timer: " << sound_timer << '\n';
+        std::cout << "Program counter is set to: " << pc << '\n';
+        std::cout << "Index pointer: " << I << '\n';
+        for (int i = 0; i < 16; i++)
+            std::cout << "Stack #" << i + 1 << ":" << stack[i] << '\n';
+        std::cout << "Stack pointer: " << sp << '\n';
     };
 
     // Loads the game into memory
