@@ -70,12 +70,89 @@ class Chip8
         }
         rom.close(); // Closes the file
 
-        std::cout << "ROM dumped successfully!";
+        // Logs
+
+        std::cout << "ROM dumped successfully!\n";
+        std::cout << size << "/" << "4096B loaded\n";
     };
 
     // CH8 interpreter
 
-    void interpreter() {};
+    void interpreter()
+    {
+        uint16_t opcode = memory[pc] << 8 | memory[pc + 1]; // Fetch opcodes(one is 2 bytes)
+
+        // Highest nibble
+
+        switch (opcode & 0xF000)
+        {
+        case 0x0000:
+            switch (opcode & 0x00FF)
+            {
+            case 0x00E0: // CLS
+                for (int i = 0; i < 64; i++)
+                {
+                    for (int j = 0; j < 32; j++)
+                    {
+                        display[i][j] = 0;
+                    }
+                }
+                pc += 2;
+                break;
+            case 0x00EE: // RET: Return from subroutine
+                sp--;
+                pc = stack[sp];
+                pc += 2;
+                break;
+            default:
+                std::cout << "Unknown 0x0000 opcode: " << std::hex << opcode << "\n";
+                break;
+            }
+            break;
+
+        case 0x1000: // Jump to address
+            pc = opcode & 0x0FFF;
+            break;
+
+        case 0x2000: // Call Stack
+            stack[sp] = pc;
+            sp++;
+            pc = opcode & 0x0FFF;
+            break;
+
+        case 0x3000: // SE Vx byte
+            uint8_t x = (opcode & 0x0F00) >> 8;
+            uint8_t kk = opcode & 0x00FF;
+
+            if (V[x] == kk)
+            {
+                pc += 4;
+            }
+            else
+                pc += 2;
+            break;
+        case 0x4000: // LD Vx byte
+            uint8_t x = (opcode & 0x0F00) >> 8;
+            uint8_t kk = opcode & 0x00FF;
+            V[x] = kk;
+            pc += 2;
+            break;
+        default:
+            std::cout << "Unknown opcode: " << std::hex << opcode << '\n';
+            break;
+        };
+
+        // Timers
+
+        if (delay_timer > 0)
+            delay_timer--;
+        if (sound_timer > 0)
+        {
+            sound_timer--;
+            if (sound_timer == 0)
+                std::cout << "BEEP!" << "\n";
+        }
+    };
 };
 
 int main()
