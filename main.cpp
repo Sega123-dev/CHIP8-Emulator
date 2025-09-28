@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <cstdlib>
 #include <ctime>
+#include <filesystem>
 
 class Chip8
 {
@@ -20,7 +21,7 @@ class Chip8
     uint8_t display[32][64]; // 32x64 px,scaled up to 10
 
     // Sets everything to 0 or default
-
+public:
     void initialize()
     {
         for (int i = 0; i < 16; i++)
@@ -104,10 +105,16 @@ class Chip8
                     }
                 }
                 pc += 2;
+
+                std::cout << "Screen cleared\n";
+
                 break;
             case 0x00EE: // RET: Return from subroutine
                 sp--;
                 pc = stack[sp];
+
+                std::cout << "[RET]Current instruction adress: " << pc << '\n';
+
                 break;
             default:
                 std::cout << "Unknown 0x0000 opcode: " << std::hex << opcode << "\n";
@@ -117,12 +124,14 @@ class Chip8
 
         case 0x1000: // Jump to address
             pc = opcode & 0x0FFF;
+            std::cout << "Jumped to adress: " << pc << '\n';
             break;
 
         case 0x2000: // Call Stack
             stack[sp] = pc + 2;
             sp++;
             pc = opcode & 0x0FFF;
+            std::cout << "New instruction placed in stack: " << stack[sp] << '\n';
             break;
             // SE Vx byte
         case 0x3000:
@@ -133,6 +142,7 @@ class Chip8
             if (V[x] == kk)
             {
                 pc += 4; // Skip the next instruction
+                std::cout << "Opcode: " << opcode << ". Instruction skipped" << "\n";
             }
             else
                 pc += 2; // Move to next instruction
@@ -146,6 +156,7 @@ class Chip8
             if (V[x] != kk)
             {
                 pc += 4;
+                std::cout << "Opcode: " << opcode << ". Instruction skipped" << "\n";
             }
             else
                 pc += 2;
@@ -159,6 +170,7 @@ class Chip8
             if (V[x] == V[y])
             {
                 pc += 4;
+                std::cout << "Opcode: " << opcode << ". Instruction skipped" << "\n";
             }
             else
             {
@@ -212,11 +224,14 @@ class Chip8
                 pc += 2;
                 break;
             case 0x4:
+            {
                 uint8_t sum = V[x] + V[y];
                 sum > 255 ? V[0xF] = 1 : V[0xF] = 0;
                 V[x] = sum & 0xFF;
                 pc += 2;
                 break;
+            }
+
             case 0x5:
                 V[0xF] = (V[x] >= V[y]) ? 1 : 0;
                 V[x] = V[x] - V[y];
@@ -251,6 +266,7 @@ class Chip8
             if (V[x] != V[y])
             {
                 pc += 4;
+                std::cout << "Opcode: " << opcode << ". Instruction skipped.";
             }
             else
             {
@@ -303,6 +319,7 @@ class Chip8
                     pixel ^= spriteBit;
                 }
             }
+            std::cout << "Sprite has been drawn";
             pc += 2;
             break;
         }
@@ -313,14 +330,20 @@ class Chip8
             {
             case 0x9E: // SKP Vx
                 if (keypad[V[x]])
+                {
                     pc += 4;
+                    std::cout << "Opcode: " << opcode << ". Instruction skipped.";
+                }
                 else
                     pc += 2;
                 break;
 
             case 0xA1: // SKNP Vx
                 if (!keypad[V[x]])
+                {
                     pc += 4;
+                    std::cout << "Opcode: " << opcode << ". Instruction skipped.";
+                }
                 else
                     pc += 2;
                 break;
@@ -350,4 +373,14 @@ class Chip8
 
 int main()
 {
+    Chip8 chip8;
+    chip8.initialize();
+    chip8.loadProgram("pong.ch8");
+
+    for (int i = 0; i < 10; i++)
+    {
+        chip8.interpreter();
+    }
+
+    return 0;
 }

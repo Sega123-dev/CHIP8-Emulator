@@ -110,6 +110,11 @@
     "text_encoding": "cpp",
     "typeinfo": "cpp",
     "variant": "cpp",
-    "cstdarg": "cpp"
+    "cstdarg": "cpp",
+    "filesystem": "cpp",
+    "codecvt": "cpp",
+    "ratio": "cpp",
+    "iomanip": "cpp",
+    "sstream": "cpp"
   }
 }
