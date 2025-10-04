@@ -1,3 +1,6 @@
+#define SDL_MAIN_HANDLED
+
+#include <SDL2/SDL.h>
 #include <iostream>
 #include <cstdint>
 #include <fstream>
@@ -8,6 +11,7 @@
 
 class Chip8
 {
+public:
     uint8_t memory[4096]; // RAM memory
     uint8_t V[16];        // 8-bit registers from V0 - VF //VF - flag register
     uint16_t I;           // Index register
@@ -20,7 +24,7 @@ class Chip8
     uint8_t display[32][64]; // 32x64 px,scaled up to 10
 
     // Sets everything to 0 or default
-public:
+
     void initialize()
     {
         for (int i = 0; i < 16; i++)
@@ -35,12 +39,16 @@ public:
             stack[i] = 0;
         sp = 0;
 
+        for (int y = 0; y < 32; y++)
+            for (int x = 0; x < 64; x++)
+                display[y][x] = 0;
+
         srand(time(nullptr)); // Generating a random number for RND Vx, byte
 
         // Function logs
 
         std::cout
-            << "RAM log: 0KB loaded";
+            << "RAM log: 0KB loaded\n";
         for (int i = 0; i < 0xF + 1; i++)
             std::cout << "Register V" << i << ":" << V[i] << '\n';
         std::cout << "Delay timer: " << delay_timer << "Hz" << '\n';
@@ -374,12 +382,78 @@ int main()
 {
     Chip8 chip8;
     chip8.initialize();
+
+    // Load the ROM (make sure pong.ch8 is in the same folder as chip8.exe)
     chip8.loadProgram("pong.ch8");
 
-    for (int i = 0; i < 10; i++)
+    // Tell SDL we handle main manually
+    SDL_SetMainReady();
+
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
     {
-        chip8.emulateCycle();
+        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
+        return 1;
     }
+
+    const int SCALE = 10; // scale each CHIP-8 pixel
+    SDL_Window *window = SDL_CreateWindow("CHIP-8 Emulator",
+                                          SDL_WINDOWPOS_CENTERED,
+                                          SDL_WINDOWPOS_CENTERED,
+                                          64 * SCALE, 32 * SCALE,
+                                          SDL_WINDOW_SHOWN);
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    // Single SDL_Rect reused for drawing pixels
+    SDL_Rect rect;
+    rect.w = SCALE;
+    rect.h = SCALE;
+
+    bool running = true;
+    SDL_Event e;
+
+    while (running)
+    {
+        // Handle events
+        while (SDL_PollEvent(&e))
+        {
+            if (e.type == SDL_QUIT)
+                running = false;
+            // map keyboard events to chip8.keypad[] here if desired
+        }
+
+        // Run multiple CPU cycles per frame for smooth execution
+        for (int i = 0; i < 1000; i++) // adjust 50 for speed if needed
+            chip8.emulateCycle();
+
+        // Clear screen
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black
+        SDL_RenderClear(renderer);
+
+        // Draw pixels
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // white
+        for (int y = 0; y < 32; y++)
+        {
+            for (int x = 0; x < 64; x++)
+            {
+                if (chip8.display[y][x])
+                {
+                    rect.x = x * SCALE;
+                    rect.y = y * SCALE;
+                    SDL_RenderFillRect(renderer, &rect);
+                }
+            }
+        }
+
+        // Show the rendered frame
+        SDL_RenderPresent(renderer);
+
+        SDL_Delay(16); // ~60 FPS
+    }
+
+    // Cleanup
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
     return 0;
 }
