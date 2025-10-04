@@ -5,7 +5,6 @@
 #include <windows.h>
 #include <cstdlib>
 #include <ctime>
-#include <filesystem>
 
 class Chip8
 {
@@ -85,7 +84,7 @@ public:
 
     // CH8 interpreter
 
-    void interpreter()
+    void emulateCycle()
     {
         uint16_t opcode = memory[pc] << 8 | memory[pc + 1]; // Fetch opcodes(one is 2 bytes)
 
@@ -319,7 +318,7 @@ public:
                     pixel ^= spriteBit;
                 }
             }
-            std::cout << "Sprite has been drawn";
+            std::cout << "Sprite has been drawn!";
             pc += 2;
             break;
         }
@@ -379,7 +378,7 @@ int main()
 
     for (int i = 0; i < 10; i++)
     {
-        chip8.interpreter();
+        chip8.emulateCycle();
     }
 
     return 0;
