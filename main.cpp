@@ -383,19 +383,13 @@ int main()
     Chip8 chip8;
     chip8.initialize();
 
-    // Load the ROM (make sure pong.ch8 is in the same folder as chip8.exe)
-    chip8.loadProgram("pong.ch8");
+    // Load the ROM (make sure pong.ch8 is in the same folder as executable)
+    chip8.loadProgram("chip8logo.ch8");
 
-    // Tell SDL we handle main manually
-    SDL_SetMainReady();
+    const int SCALE = 10;             // scale each CHIP-8 pixel
+    const int CYCLES_PER_FRAME = 100; // CHIP-8 instructions per frame (~10-15 is good)
+    const int FRAME_DELAY_MS = 16;    // ~60 FPS
 
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
-    {
-        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
-        return 1;
-    }
-
-    const int SCALE = 10; // scale each CHIP-8 pixel
     SDL_Window *window = SDL_CreateWindow("CHIP-8 Emulator",
                                           SDL_WINDOWPOS_CENTERED,
                                           SDL_WINDOWPOS_CENTERED,
@@ -403,7 +397,6 @@ int main()
                                           SDL_WINDOW_SHOWN);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    // Single SDL_Rect reused for drawing pixels
     SDL_Rect rect;
     rect.w = SCALE;
     rect.h = SCALE;
@@ -418,19 +411,19 @@ int main()
         {
             if (e.type == SDL_QUIT)
                 running = false;
-            // map keyboard events to chip8.keypad[] here if desired
+            // TODO: Map keyboard events to chip8.keypad[]
         }
 
-        // Run multiple CPU cycles per frame for smooth execution
-        for (int i = 0; i < 1000; i++) // adjust 50 for speed if needed
+        // Run a limited number of cycles per frame
+        for (int i = 0; i < CYCLES_PER_FRAME; i++)
             chip8.emulateCycle();
 
         // Clear screen
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        // Draw pixels
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // white
+        // Draw CHIP-8 display
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         for (int y = 0; y < 32; y++)
         {
             for (int x = 0; x < 64; x++)
@@ -444,16 +437,10 @@ int main()
             }
         }
 
-        // Show the rendered frame
+        // Present frame
         SDL_RenderPresent(renderer);
 
-        SDL_Delay(16); // ~60 FPS
+        // Wait for next frame (~60 FPS)
+        SDL_Delay(FRAME_DELAY_MS);
     }
-
-    // Cleanup
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
-    return 0;
 }
