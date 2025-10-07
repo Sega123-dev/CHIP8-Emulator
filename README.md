@@ -50,4 +50,5 @@ CHIP8 has 35 official opcodes.Symbols:
 # Examples
 
 ![Pong](images/pong.png)
+
 ![Space Invaders](images/space%20invaders.png)
