@@ -313,6 +313,7 @@ public:
             sound_timer--;
             if (sound_timer == 0)
                 Beep(440, 200);
+            std::cout << "BEEP" << std::endl;
         }
     }
 };
@@ -324,7 +325,7 @@ int main()
     chip8.loadProgram("airplane.ch8");
 
     const int SCALE = 10;
-    const int CYCLES_PER_FRAME = 1; // Cycle function needs to be executed this many times in a frame so it can actually show something on the screen
+    const int CYCLES_PER_FRAME = 5; // Cycle function needs to be executed this many times in a frame so it can actually show something on the screen
     const int FRAME_DELAY_MS = 16;  // 60 FPS
 
     // Makes the centered 64x32 window scaled by 10
@@ -384,6 +385,7 @@ int main()
         SDL_RenderClear(renderer);                      // CLS
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Puts black as the color
+        // Puts the pixels on the screen
         for (int y = 0; y < 32; y++)
             for (int x = 0; x < 64; x++)
                 if (chip8.display[y][x])
