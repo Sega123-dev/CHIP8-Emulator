@@ -40,7 +40,8 @@ CHIP8 has 35 official opcodes.Symbols:
 4. In terminal,write the name(it has to be written exactly as written in menu).
 5. Enjoy!
 
-**NOTES**: Controls depends on the game,but usually it is W,S,Q,2,8,4 keys on the keyboard.For more ROMs,visit this repo: [ROMs](`https://github.com/dmatlack/chip8/tree/master/roms`)
+**NOTES**: Controls depends on the game,but usually it is W,S,Q,2,8,4 keys on the keyboard.For more ROMs,visit this repo: [ROMs](https://github.com/dmatlack/chip8/tree/master/roms)
+
 
 # Technologies used:
 
