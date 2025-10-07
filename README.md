@@ -37,13 +37,17 @@ CHIP8 has 35 official opcodes.Symbols:
 1. Clone the repository or download the ZIP file containing this repo.
 2. Place the ROMs inside the compiler directory(usually the bin folder,depends on the compiler).
 3. Build and run the program.
-4. In terminal,write the name(it has to be written exactly as written in menu).
+4. In terminal,write the name of the program (it has to be written exactly as written in menu).
 5. Enjoy!
 
 **NOTES**: Controls depends on the game,but usually it is W,S,Q,2,8,4 keys on the keyboard.For more ROMs,visit this repo: [ROMs](https://github.com/dmatlack/chip8/tree/master/roms)
 
-
 # Technologies used:
 
 - *C++* - used for opcodes,timing,graphics,memory.
-- *SDL* - used for rendering graphics and input
+- *SDL* - used for rendering graphics and input.
+
+# Examples
+
+![Pong](images/pong.png)
+![Space Invaders](images/space%20invaders.png)
