@@ -320,13 +320,26 @@ public:
 
 int main()
 {
+    std::string progName;
+    std::cout << "Available ROMs: " << std::endl;
+    std::cout << "airplane\n";
+    std::cout << "blitz\n";
+    std::cout << "chip8logo\n";
+    std::cout << "pong\n";
+    std::cout << "space invaders\n";
+
+    std::cout << "NOTE:These are the ROMs that comes with this repository,please place them in your compiler directory.\n";
+    std::cout << "Program is working at 10 cycles per frame.\n";
+    std::cout << "Provide the program name: ";
+    getline(std::cin, progName);
+
     Chip8 chip8;
     chip8.initialize();
-    chip8.loadProgram("airplane.ch8");
+    chip8.loadProgram((progName + ".ch8").c_str());
 
     const int SCALE = 10;
-    const int CYCLES_PER_FRAME = 5; // Cycle function needs to be executed this many times in a frame so it can actually show something on the screen
-    const int FRAME_DELAY_MS = 16;  // 60 FPS
+    const int CYCLES_PER_FRAME = 10; // Cycle function needs to be executed this many times in a frame so it can actually show something on the screen
+    const int FRAME_DELAY_MS = 16;   // 60 FPS
 
     // Makes the centered 64x32 window scaled by 10
 
