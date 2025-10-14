@@ -19,7 +19,7 @@ public:
     uint16_t pc;          // Program counter - used for moving through instructions
     uint16_t stack[16];   // Stack - holds memory adresses for doing sub-tasks
     uint16_t sp;          // Stack pointer - used to point to a specific adress in stack
-    uint8_t delay_timer;
+    uint8_t delay_timer;  // 60HZ
     uint8_t sound_timer;
     uint8_t keypad[16];
     uint8_t display[32][64];
@@ -34,7 +34,7 @@ public:
         srand(time(nullptr)); // For DRW
 
         // Clear memory, registers, display, stack
-        memset(memory, 0, sizeof(memory));
+        memset(memory, 0, sizeof(memory)); // m
         memset(V, 0, sizeof(V));
         memset(stack, 0, sizeof(stack));
         memset(display, 0, sizeof(display));
@@ -73,7 +73,7 @@ public:
         std::ifstream rom(filename, std::ios::binary | std::ios::ate); // Transforms the file into raw binary and starts reading in from the end
         if (!rom)
         {
-            std::cerr << "Failed to load ROM: " << filename << std::endl;
+            std::cerr << "Failed to load ROM: " << filename << "\n";
             return;
         }
 
@@ -88,7 +88,7 @@ public:
         }
     }
 
-    void emulateCycle()
+    void emulateCycle() // Interpreter
     {
         uint16_t opcode = memory[pc] << 8 | memory[pc + 1]; // Fetch opcode
 
@@ -300,7 +300,7 @@ public:
             break;
 
         default:
-            std::cerr << "Unknown opcode: " << std::hex << opcode << std::endl;
+            std::cerr << "Unknown opcode: " << std::hex << opcode << '\n';
             pc += 2;
             break;
         }
@@ -313,7 +313,7 @@ public:
             sound_timer--;
             if (sound_timer == 0)
                 Beep(440, 200);
-            std::cout << "BEEP" << std::endl;
+            std::cout << "BEEP" << '\n';
         }
     }
 };
