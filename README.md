@@ -76,11 +76,13 @@ CHIP8 has 35 official opcodes.Symbols:
 1. Clone the repository or download the ZIP file containing this repo.
 2. Place the ROMs inside the compiler directory(usually the bin folder,depends on the compiler).
 3. Build and run the program.
-4. In terminal,write the name of the program (it has to be written exactly as written in menu).
+4. In terminal,write the name of the program (it has to be written exactly as written in the menu).
 5. Enjoy!
 
 **NOTES**: Controls depends on the game,but usually it is W,S,Q,2,8,4 keys on the keyboard.For more ROMs,visit this repo: [ROMs](https://github.com/dmatlack/chip8/tree/master/roms)
+**CYCLES**: Some games require less CPU cycles while some of them don't,there is a chance that the game is faster or unplayable because of too much or less cycles.
 
+This emulator works for all the programs in the ROM file.Please keep in mind this is a simulation of an original CHIP8 emulator.This emulator does not support Super-CH8 or other CH8 ROM variations.
 # Technologies used:
 
 - *C++* - used for opcodes,timing,graphics,memory.
