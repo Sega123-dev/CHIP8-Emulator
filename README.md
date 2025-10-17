@@ -80,7 +80,7 @@ CHIP8 has 35 official opcodes.Symbols:
 5. Enjoy!
 
 **NOTES**: Controls depends on the game,but usually it is W,S,Q,2,8,4 keys on the keyboard.For more ROMs,visit this repo: [ROMs](https://github.com/dmatlack/chip8/tree/master/roms)
-**CYCLES**: Some games require less CPU cycles while some of them don't,there is a chance that the game is faster or unplayable because of too much or less cycles.
+ Some games require less CPU cycles while some of them don't,there is a chance that the game is faster or unplayable because of too much or less cycles.
 
 This emulator works for all the programs in the ROM file.Please keep in mind this is a simulation of an original CHIP8 emulator.This emulator does not support Super-CH8 or other CH8 ROM variations.
 # Technologies used:
