@@ -60,7 +60,7 @@ CHIP8 has 35 official opcodes.Symbols:
 | FX33<br>                                                               | BCD<br>     | set_BCD(Vx)<br>*(I+0) = BCD(3);<br>*(I+1) = BCD(2);<br>*(I+2) = BCD(1);<br><br> | Stores the binary-coded decimal representation of VX, with the hundreds digit in memory at location in I, the tens digit at location I+1, and the ones digit at location I+2.[23]<br>                                                                                                                                                                                                              |
 | FX55<br>                                                               | MEM<br>     | reg_dump(Vx, &amp;I)<br>                                                        | Stores from V0 to VX (including VX) in memory, starting at address I. The offset from I is increased by 1 for each value written, but I itself is left unmodified.[d][23]<br>                                                                                                                                                                                                                      |
 | FX65<br>                                                               | MEM<br>     | reg_load(Vx, &amp;I)<br>                                                        | Fills from V0 to VX (including VX) with values from memory, starting at address I. The offset from I is increased by 1 for each value read, but I itself is left unmodified.[d][23]<br>                                                                                                                                                                                                            |
-
+This emulator covers also the unofficial opcodes,developers were adding them so they can boot more complex games.
 
 # Features
 - 5 ROMs to test the emulator
@@ -79,7 +79,7 @@ CHIP8 has 35 official opcodes.Symbols:
 4. In terminal,write the name of the program (it has to be written exactly as written in the menu).
 5. Enjoy!
 
-**NOTES**: Controls depends on the game,but usually it is W,S,Q,2,8,4 keys on the keyboard.For more ROMs,visit this repo: [ROMs](https://github.com/dmatlack/chip8/tree/master/roms)
+**NOTES**: Controls depends on the game,but usually it is W,S,Q,2,8,4 keys on the keyboard.For more ROMs,visit this repo: [ROMs](https://github.com/dmatlack/chip8/tree/master/roms).
  Some games require less CPU cycles while some of them don't,there is a chance that the game is faster or unplayable because of too much or less cycles.
 
 This emulator works for all the programs in the ROM file.Please keep in mind this is a simulation of an original CHIP8 emulator.This emulator does not support Super-CH8 or other CH8 ROM variations.
